@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { useChannel } from '../hooks/useChannel'
 
 const ably = new Ably.Realtime.Promise({ authUrl: '/api/createTokenRequest' })
+const channel = ably.channels.get('tic-tac-toe')
 
 const winningCombinations = [
   [0, 1, 2],
@@ -37,8 +38,7 @@ export default function TicTacToe() {
   const [gameOver, setGameOver] = useState<boolean>(false)
 
   useEffect(() => {
-    const channel = ably.channels.get('tic-tac-toe')
-    channel.publish('board', board)
+    channel.publish('tic-tac-toe', board)
     channel.subscribe('tic-tac-toe', (msg) => setBoard(board))
     return () => channel.unsubscribe()
   }, [])
@@ -77,6 +77,7 @@ export default function TicTacToe() {
   const textColor = gameOver ? 'text-red-200' : 'text-red-500'
   const buttonStyle = `w-full aspect-square border-black border-[1px] text-9xl pb-8 ${textColor}`
 
+  console.log('%cTicTacToe.tsx line:80 ably', 'color: #007acc;', ably)
   return (
     <div className='p-4'>
       <h1 className='text-4xl text-center'>Tic Tac Toe</h1>

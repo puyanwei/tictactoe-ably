@@ -1,6 +1,17 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { useState, MouseEvent } from 'react'
+import { useState } from 'react'
+
+const winningCombinations = [
+  [0, 1, 2],
+  [3, 4, 5],
+  [6, 7, 8],
+  [0, 3, 6],
+  [1, 4, 7],
+  [2, 5, 8],
+  [0, 4, 8],
+  [2, 4, 6],
+]
 
 type StateType = '' | 'x' | 'o'
 export interface Board {
@@ -21,6 +32,7 @@ const initialBoard: Board[] = [
 const Home: NextPage = () => {
   const [board, setBoard] = useState<Board[]>(initialBoard)
   const [isPlayerOneTurn, setPlayerOneTurn] = useState<boolean>(true)
+  const [gameOver, setGameOver] = useState<boolean>(false)
 
   function handleClick(index: number) {
     const newBoard = [...board]
@@ -28,9 +40,31 @@ const Home: NextPage = () => {
     newBoard[index].state = isPlayerOneTurn ? 'x' : 'o'
     setBoard(newBoard)
     setPlayerOneTurn(!isPlayerOneTurn)
+    if (!!checkWinner(board)) {
+      setGameOver(true)
+      return null
+    }
   }
 
-  const buttonStyle = `w-full aspect-square border-black border-[1px] text-9xl `
+  function checkWinner(board: Board[]): boolean {
+    return winningCombinations.some((combination) => {
+      const [a, b, c] = combination
+      if (
+        board[a].state === '' ||
+        board[b].state === '' ||
+        board[c].state === ''
+      )
+        return false
+      return (
+        board[a].state &&
+        board[a].state === board[b].state &&
+        board[a].state === board[c].state
+      )
+    })
+  }
+
+  const textColor = gameOver ? 'text-red-200' : 'text-red-500'
+  const buttonStyle = `w-full aspect-square border-black border-[1px] text-9xl pb-8 ${textColor}`
   return (
     <div>
       <Head>
@@ -40,12 +74,18 @@ const Home: NextPage = () => {
       </Head>
       <div className='p-4'>
         <h1 className='text-4xl text-center'>Tic Tac Toe</h1>
-        <div className='grid grid-cols-3 p-20 pt-16'>
+        {gameOver && (
+          <h2 className='pt-4 text-2xl text-center'>
+            Game Over - {isPlayerOneTurn ? 'O' : 'X'} is the winner!
+          </h2>
+        )}
+        <div className='grid grid-cols-3 p-20 pt-12 place-content-center'>
           {board.map(({ state }, index) => (
             <button
               className={buttonStyle}
               key={index}
               onClick={() => handleClick(index)}
+              disabled={gameOver}
             >
               {state}
             </button>

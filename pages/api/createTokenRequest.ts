@@ -7,7 +7,7 @@ export default async function handler(
 ) {
   const client = new Ably.Realtime(process.env.ABLY_API_KEY as string)
   const tokenRequestData = await client.auth.createTokenRequest({
-    clientId: 'ably-nextjs-demo',
+    clientId: 'tic-tac-toe',
   })
   res.status(200).json(tokenRequestData)
 }

@@ -1,17 +1,36 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { useState } from 'react'
+import { useState, MouseEvent } from 'react'
 
-type StateType = 'empty' | 'x' | 'o'
+type StateType = '' | 'x' | 'o'
 export interface Board {
   state: StateType
 }
-const initialBoard: Board[] = Array(9).fill({ state: 'empty' })
+const initialBoard: Board[] = [
+  { state: '' },
+  { state: '' },
+  { state: '' },
+  { state: '' },
+  { state: '' },
+  { state: '' },
+  { state: '' },
+  { state: '' },
+  { state: '' },
+]
 
 const Home: NextPage = () => {
   const [board, setBoard] = useState<Board[]>(initialBoard)
+  const [isPlayerOneTurn, setPlayerOneTurn] = useState<boolean>(true)
 
-  const buttonStyle = `w-full aspect-square border-black border-[1px]`
+  function handleClick(index: number) {
+    const newBoard = [...board]
+    if (newBoard[index].state !== '') return null
+    newBoard[index].state = isPlayerOneTurn ? 'x' : 'o'
+    setBoard(newBoard)
+    setPlayerOneTurn(!isPlayerOneTurn)
+  }
+
+  const buttonStyle = `w-full aspect-square border-black border-[1px] text-9xl `
   return (
     <div>
       <Head>
@@ -22,15 +41,15 @@ const Home: NextPage = () => {
       <div className='p-4'>
         <h1 className='text-4xl text-center'>Tic Tac Toe</h1>
         <div className='grid grid-cols-3 p-20 pt-16'>
-          <button className={buttonStyle}></button>
-          <button className={buttonStyle}></button>
-          <button className={buttonStyle}></button>
-          <button className={buttonStyle}></button>
-          <button className={buttonStyle}></button>
-          <button className={buttonStyle}></button>
-          <button className={buttonStyle}></button>
-          <button className={buttonStyle}></button>
-          <button className={buttonStyle}></button>
+          {board.map(({ state }, index) => (
+            <button
+              className={buttonStyle}
+              key={index}
+              onClick={() => handleClick(index)}
+            >
+              {state}
+            </button>
+          ))}
         </div>
       </div>
     </div>

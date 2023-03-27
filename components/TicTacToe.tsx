@@ -27,9 +27,9 @@ export default function TicTacToe() {
     const newBoard = [...board]
     if (newBoard[index].state !== "") return null
     newBoard[index].state = isPlayerOneTurn ? "x" : "o"
-    // await ably.channels
-    //   .get("tic-tac-toe")
-    //   .publish("tic-tac-toe", { board, isPlayerOneTurn, gameOver })
+    await ably.channels
+      .get("tic-tac-toe")
+      .publish("tic-tac-toe", { board, isPlayerOneTurn, gameOver })
 
     setPlayerOneTurn(!isPlayerOneTurn)
 

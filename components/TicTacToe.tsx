@@ -11,15 +11,16 @@ export default function TicTacToe() {
   const [gameOver, setGameOver] = useState<boolean>(false)
 
   useEffect(() => {
-    console.log(`useEffect triggered`)
     channel.publish("tic-tac-toe", { board, isPlayerOneTurn, gameOver })
     channel.subscribe("tic-tac-toe", (msg) => {
+      console.log(`subscription triggered`, msg)
       if (!msg?.data) return null
       const { board, isPlayerOneTurn, gameOver } = msg.data
       setBoard(board)
       setPlayerOneTurn(isPlayerOneTurn)
       setGameOver(gameOver)
     })
+    return () => channel.unsubscribe()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -27,17 +28,43 @@ export default function TicTacToe() {
     const newBoard = [...board]
     if (newBoard[index].state !== "") return null
     newBoard[index].state = isPlayerOneTurn ? "x" : "o"
-    await ably.channels
-      .get("tic-tac-toe")
-      .publish("tic-tac-toe", { board, isPlayerOneTurn, gameOver })
 
-    setPlayerOneTurn(!isPlayerOneTurn)
+    const newPlayerOneTurn = !isPlayerOneTurn
+    // setPlayerOneTurn(newPlayerOneTurn)
 
-    if (!!checkWinner(board)) {
-      setGameOver(true)
-      ably.channels.get("tic-tac-toe").publish("tic-tac-toe", { board, isPlayerOneTurn, gameOver })
-      return null
-    }
+    const newGameOver = checkWinner(newBoard)
+    console.log({ newGameOver })
+    // setGameOver(newGameOver)
+
+    await channel.publish("tic-tac-toe", {
+      board,
+      isPlayerOneTurn: newPlayerOneTurn,
+      gameOver: newGameOver,
+    })
+  }
+
+  async function handleRestart() {
+    const newBoard: Board[] = [
+      { state: "" },
+      { state: "" },
+      { state: "" },
+      { state: "" },
+      { state: "" },
+      { state: "" },
+      { state: "" },
+      { state: "" },
+      { state: "" },
+    ]
+
+    // setPlayerOneTurn(newPlayerOneTurn)
+
+    // setGameOver(newGameOver)
+    // setBoard(newBoard)
+    await channel.publish("tic-tac-toe", {
+      board: newBoard,
+      isPlayerOneTurn: true,
+      gameOver: false,
+    })
   }
 
   function checkWinner(board: Board[]): boolean {
@@ -48,22 +75,6 @@ export default function TicTacToe() {
         board[a].state && board[a].state === board[b].state && board[a].state === board[c].state
       )
     })
-  }
-
-  function handleRestart() {
-    setBoard([
-      { state: "" },
-      { state: "" },
-      { state: "" },
-      { state: "" },
-      { state: "" },
-      { state: "" },
-      { state: "" },
-      { state: "" },
-      { state: "" },
-    ])
-    setPlayerOneTurn(true)
-    setGameOver(false)
   }
 
   const textColor = gameOver ? "text-red-200" : "text-red-500"
@@ -86,17 +97,17 @@ export default function TicTacToe() {
           </button>
         ))}
       </div>
-      {gameOver && (
+      {
         <div className="text-center">
           <h2 className="w-full pt-4 text-2xl">
             Game Over - {isPlayerOneTurn ? "O" : "X"} is the winner!
           </h2>
           <br />
-          <button className={buttonStyle} onClick={handleRestart}>
+          <button className={buttonStyle} onClick={() => handleRestart()}>
             Restart
           </button>
         </div>
-      )}
+      }
     </div>
   )
 }

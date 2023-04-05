@@ -10,5 +10,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const tokenRequestData = await client.auth.createTokenRequest({
     clientId: id,
   })
+  console.log({ tokenRequestData })
   res.status(200).json(tokenRequestData)
 }

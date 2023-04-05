@@ -1,6 +1,6 @@
 import Ably from "ably/promises"
 import { useEffect, useState } from "react"
-import { winningCombinations } from "../const/maps"
+import { winningCombinations } from "../../const/maps"
 
 const ably = new Ably.Realtime.Promise({ authUrl: "/api/createTokenRequest" })
 const channel = ably.channels.get("tic-tac-toe")

@@ -6,7 +6,7 @@ const ably = new Ably.Realtime.Promise({ authUrl: "/api/createTokenRequest" })
 const channel = ably.channels.get("tic-tac-toe")
 
 export default function TicTacToe() {
-  const [board, setBoard] = useState<Board[]>(initialBoard)
+  const [board, setBoard] = useState<Cell[]>(initialBoard)
   const [isPlayerOneTurn, setPlayerOneTurn] = useState<boolean>(true)
   const [gameOver, setGameOver] = useState<boolean>(false)
 
@@ -44,7 +44,7 @@ export default function TicTacToe() {
   }
 
   async function handleRestart() {
-    const newBoard: Board[] = [
+    const newBoard: Cell[] = [
       { state: "" },
       { state: "" },
       { state: "" },
@@ -67,7 +67,7 @@ export default function TicTacToe() {
     })
   }
 
-  function checkWinner(board: Board[]): boolean {
+  function checkWinner(board: Cell[]): boolean {
     return winningCombinations.some((combination) => {
       const [a, b, c] = combination
       if (board[a].state === "" || board[b].state === "" || board[c].state === "") return false
@@ -113,10 +113,10 @@ export default function TicTacToe() {
 }
 
 type StateType = "" | "x" | "o"
-export interface Board {
+export interface Cell {
   state: StateType
 }
-const initialBoard: Board[] = [
+const initialBoard: Cell[] = [
   { state: "" },
   { state: "" },
   { state: "" },

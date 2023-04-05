@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ably-labs/react-hooks": "^2.1.0",
     "@types/ably": "^1.0.0",
     "ably": "^1.2.29",
     "nanoid": "^4.0.2",

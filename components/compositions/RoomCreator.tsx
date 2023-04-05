@@ -1,5 +1,6 @@
 import Ably from "ably/promises"
 import { nanoid } from "nanoid"
+import { configureAbly } from "@ably-labs/react-hooks"
 import { useState } from "react"
 
 export function RoomCreator() {
@@ -7,9 +8,12 @@ export function RoomCreator() {
 
   function handleClick() {
     const roomId = nanoid()
-    const ably = new Ably.Realtime.Promise({
-      authUrl: "/api/createTokenRequest",
-    })
+    // https://github.com/ably-labs/ably-nextjs-fundamentals-kit/blob/main/pages/presence.tsx
+    // const ably = (new Ably.Realtime.Promise() = configureAbly({
+    //   authUrl: "/api/createTokenRequest",
+    //   authMethod: "POST",
+    //   roomId,
+    // }))
   }
 
   return (

@@ -2,6 +2,13 @@
 # yarn lockfile v1
 
 
+"@ably-labs/react-hooks@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@ably-labs/react-hooks/-/react-hooks-2.1.0.tgz#fefb3106b2b8a2f1d2ecdc97eb51d4f286431003"
+  integrity sha512-coOlkoHpqfUzUFXb1cngNlfGGeTTXl6gg3u+Q4gkdXj9+UPWLZ7VKoFBwMJrGTFTmnoh9VIlwNG0PQdw2Avi9Q==
+  dependencies:
+    ably "^1.2.27"
+
 "@ably/msgpack-js@^0.4.0":
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/@ably/msgpack-js/-/msgpack-js-0.4.0.tgz#aaaf5d8dffacf7aa253effd8c3488aa09130e6a2"
@@ -305,6 +312,15 @@ ably@*, ably@^1.2.29:
   version "1.2.29"
   resolved "https://registry.yarnpkg.com/ably/-/ably-1.2.29.tgz#fa6d5cd2cfa693feb627b26c67d5b24a1e9535f6"
   integrity sha512-bgacOwmDBpHACysn1o0ZoScJsaiOeJoZXhIEUw9aMrqd91B3JBrtJwU80XJjPAw02lE7mxeGCWh85SDNNUN+hg==
+  dependencies:
+    "@ably/msgpack-js" "^0.4.0"
+    got "^11.8.2"
+    ws "^5.1"
+
+ably@^1.2.27:
+  version "1.2.38"
+  resolved "https://registry.yarnpkg.com/ably/-/ably-1.2.38.tgz#fda71b711a446caa516cec10d3f669ca1226c4ad"
+  integrity sha512-BoRdt/nN2NnnkW/y7S0MGgSMQNGHj43d5hYtPy/I4ctHOLAQyjofbpk6awUV9O9lofiAT3N2M8ViF9NCK9SoMA==
   dependencies:
     "@ably/msgpack-js" "^0.4.0"
     got "^11.8.2"

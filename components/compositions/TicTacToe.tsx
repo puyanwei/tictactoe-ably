@@ -83,7 +83,7 @@ export default function TicTacToe() {
 
   if (!!gameOver) channel.unsubscribe("tic-tac-toe")
   return (
-    <div className="p-4">
+    <>
       <h1 className="text-4xl text-center">Tic Tac Toe</h1>
       <div className="grid max-w-2xl grid-cols-3 p-20 pt-12 mx-auto">
         {board.map(({ state }, index) => (
@@ -108,7 +108,7 @@ export default function TicTacToe() {
           </button>
         </div>
       }
-    </div>
+    </>
   )
 }
 
